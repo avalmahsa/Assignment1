@@ -40,4 +40,5 @@ for(i in 1:length(UnitsL)){
 tempMatrix=cbind(Species,Limb.Width,UnitsW,Limb.Length,UnitsL)
 MyData=as.data.frame(tempMatrix)
 
-write.csv(MyData,"..\Data\MyData.csv")
+write.csv(MyData,"Data//measurements.csv",row.names=FALSE)
+
