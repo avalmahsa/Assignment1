@@ -21,3 +21,4 @@ for(i in 1:length(MData$Species)){
 }
 
 MData = as.data.frame(cbind(MData,Limb.Area,UnitsA))
+write.csv(MData,"Data//measurements_updated.csv",row.names=FALSE)
