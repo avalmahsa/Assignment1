@@ -2,8 +2,8 @@
 MData=read.csv("Data//measurements.csv")
 
 #Using area instead of volume due to lack of dimensions
-Limb.Area = 1:length(MData$Species)
-UnitsA = 1:length(MData$Species)
+Limb.Volume = 1:length(MData$Species)
+UnitsV = 1:length(MData$Species)
 
 #loop to convert units from "cm" to "mm" or keep the same if already in "mm"
 for(i in 1:length(MData$Species)){
@@ -18,13 +18,20 @@ for(i in 1:length(MData$Species)){
     length = length*10
   }
   
-  Limb.Area[i] = length * width
-  UnitsA[i] = "mm^2"
+  #Treating limb as cylinder to calc volume
+  
+  radius = width/2
+  
+  Limb.Volume[i] = pi * radius^2 * length
+    
+  UnitsV[i] = "mm^3"
 }
 
-#added limb area information to data frame 
-MData = as.data.frame(cbind(MData,Limb.Area,UnitsA))
+#added limb volume information to data frame 
+MData = as.data.frame(cbind(MData,Limb.Volume,UnitsV))
 
+#Save updated data frame
+write.csv(MData,"Data//measurements_w_volume.csv",row.names=FALSE)
 
 #Code for graph
 
