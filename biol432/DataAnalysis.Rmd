@@ -1,0 +1,75 @@
+---
+title: "DataAnalysis"
+author: "Mahsa Aghaeeaval"
+date: "20/01/2020"
+output: html_document
+---
+
+```{r}
+library("dplyr")
+library("ggplot2")
+```
+
+```{r}
+MData=read.csv("Data//measurements.csv")
+names(MData)
+MData=rename(MData,SPC = Species, LBW = Limb.Width, UNW = UnitsW, LBL = Limb.Length, UNL = UnitsL)
+names(MData)
+```
+```{r}
+
+for(i in 1:length(MData$SPC)){
+  if (MData$UNW[i] == "cm"){
+    MData$LBW[i] = MData$LBW[i]*10
+    MData$UNW[i] = "mm"
+  }
+  
+  if (MData$UNL[i]== "cm"){
+    MData$LBL[i] = MData$LBL[i]*10
+    MData$UNL[i] = "mm"
+  }
+}
+
+head(MData)
+```
+```{r}
+MData=mutate(MData,LBV = pi * (LBW/2)^2 * LBL)
+head(MData)
+```
+
+```{r }
+Graph<- ggplot(MData, aes(LBW,LBL)) +
+  xlab("Limb Width (mm)")+
+  ylab("Limb Length (mm)")+
+  geom_point() +
+  geom_smooth(method = 'lm',colour="red",se=FALSE)
+print(Graph)
+
+```
+```{r}
+avgV= mean(MData$LBV)
+
+aboveAvgV = 1:10
+
+for (i in length(MData$LBV):1){
+  if (MData$LBV[i] < avgV){
+    aboveAvgV[i] <- 0
+  }else{
+    aboveAvgV[i] <- i
+  }
+}
+
+Graph<- ggplot(MData[aboveAvgV,], aes(LBW,LBL)) +
+  xlab("Limb Width (mm)")+
+  ylab("Limb Length (mm)")+
+  geom_point() +
+  geom_smooth(method = 'lm',colour="red",se=FALSE)
+print(Graph)
+
+```
+
+```{r}
+belowAvgData = MData[-aboveAvgV,]
+select(MData,SPC,LBV)
+```
+
