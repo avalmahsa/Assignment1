@@ -1,17 +1,23 @@
 ---
 title: "DataAnalysis"
 author: "Mahsa Aghaeeaval"
-date: "20/01/2020"
+date: "21/01/2020"
 output: html_document
 ---
 
-```{r}
+```{r setup}
 library("dplyr")
 library("ggplot2")
+library("knitr")
+
+fileloc = paste(getwd(), "biol432", sep="/")
+knitr::opts_knit$set(root.dir = fileloc)
 ```
 
+
 ```{r}
-MData=read.csv("Data//measurements.csv")
+fileloc = paste(getwd(),"..","Data","measurements.csv", sep="/")
+MData=read.csv(fileloc)
 names(MData)
 MData=rename(MData,SPC = Species, LBW = Limb.Width, UNW = UnitsW, LBL = Limb.Length, UNL = UnitsL)
 names(MData)
@@ -70,6 +76,31 @@ print(Graph)
 
 ```{r}
 belowAvgData = MData[-aboveAvgV,]
-select(MData,SPC,LBV)
+belowAvgData = select(belowAvgData,SPC,LBV)
+kable(belowAvgData)
+```
+
+```{r}
+MData$IMG=1:10
+for (i in 1:length(MData$SPC)){
+  if (MData$LBV[i] < 100000){
+    MData$IMG[i] = "Epstein"
+    
+  }else if (MData$LBV[i] < 1000000){
+    MData$IMG[i] = "Didn't Kill"
+  }else{
+    MData$IMG[i] = "Himself"
+  }
+}
+
+tempData = group_by(MData, IMG)
+
+SumGrpL=summarise(tempData,Avg=mean(LBL),SD=sd(LBL))
+SumGrpW=summarise(tempData,Avg=mean(LBW),SD=sd(LBW))
+SumGrpV=summarise(tempData,Avg=mean(LBV),SD=sd(LBV))
+
+kable(SumGrpL)
+kable(SumGrpW)
+kable(SumGrpV)
 ```
 
