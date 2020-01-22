@@ -50,5 +50,6 @@ tempMatrix=cbind(Species,Limb.Width,UnitsW,Limb.Length,UnitsL)
 MyData=as.data.frame(tempMatrix)
 
 #saved data
-write.csv(MyData,"Data//measurements.csv",row.names=FALSE)
+fileloc = paste(getwd(),"Data","measurements.csv", sep="/")
+write.csv(MyData,fileloc,row.names=FALSE)
 
