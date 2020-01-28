@@ -1,0 +1,28 @@
+---
+title: "Regex"
+author: "Mahsa Aghaeeaval"
+date: "28/01/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("dplyr")
+```
+
+```{r}
+fileloc = paste(getwd(),"..","Data","measurements.csv", sep="/")
+MData=read.csv(fileloc)
+```
+
+
+```{r}
+MData = mutate(MData, Sp = gsub("(\\w)\\w+\\s(\\w+)","\\1. \\2",MData$Species))
+```
+
+```{r}
+MDataNew = select(MData, Sp, everything(), -Species)
+```
+
+
+
